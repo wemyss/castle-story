@@ -2,6 +2,7 @@ import Component from 'inferno-component';
 import './registerServiceWorker';
 import Checkbox from './Checkbox';
 import './App.css';
+import logo from './logo.png';
 
 const gameObjects = [
   {
@@ -75,33 +76,40 @@ class App extends Component {
 
   render() {
     return (
-      <div className='App'>
-        <div className='App-header'>
-          <h1>Castle Story</h1>
+      <div>
+        <div className='App'>
+          <div className='App-header'>
+            <img src={logo} className='App-logo' alt='Castle Story' />
+            <h1>Game Object Extractor</h1>
+          </div>
+          <div className='App-intro'>
+            <p>
+              To get started, paste the contents of your <code>gameobjects.json</code> below.
+            </p>
+            <form onSubmit={this.handleSubmit}>
+              {gameObjects.map(g =>
+                  <Checkbox key={g.name} label={g.displayName} checked={this.state[g.name]} onChange={() => this.updateCheckbox(g.name)} />
+                )
+              }
+              <br />
+              <br />
+              <textarea value={this.state.uploadedGameObjects} onChange={this.updateUserGameObjects}></textarea>
+              <br />
+              <button type='submit'>EXTRACT OBJECTS</button>
+            </form>
+            <p>Now copy the outputted JSON below and paste at the end of the <code>gameobjects.json</code> for your map, just before the last character - which would be a <code>]</code> (make sure you put a comma before the last <code>}</code> as well - you can validate your JSON online)</p>
+            <textarea value={this.state.extractedObjects} readonly></textarea>
+          </div>
+          <hr/>
+          <h3>Notes</h3>
+          <ul>
+            <li>The planks for Rope Bridges are stored in <code>PlacedBlocks.json</code>, so make sure to copy that across otherwise you'll just have rope!</li>
+            <li>The outputted JSON is invalid because I've unwrapped it from it's array, make sure to insert it inside of the array in <code>gameobjects.json</code></li>
+          </ul>
         </div>
-        <div className='App-intro'>
-          <p>
-            To get started, paste the contents of your <code>gameobjects.json</code> below.
-          </p>
-          <form onSubmit={this.handleSubmit}>
-            {gameObjects.map(g =>
-                <Checkbox key={g.name} label={g.displayName} checked={this.state[g.name]} onChange={() => this.updateCheckbox(g.name)} />
-              )
-            }
-            <br />
-            <br />
-            <textarea value={this.state.uploadedGameObjects} onChange={this.updateUserGameObjects}></textarea>
-            <br />
-            <button type='submit'>EXTRACT OBJECTS</button>
-          </form>
-          <p>Now copy the outputted JSON below and paste at the end of the <code>gameobjects.json</code> for your map, just before the last character - which would be a <code>]</code></p>
-          <textarea value={this.state.extractedObjects} readonly></textarea>
+        <div className='footer'>
+          <small>Developed by <a href="https://wemyss.github.io">Sam Wemyss</a></small>
         </div>
-        <hr/>
-        <h3>Notes</h3>
-        <ul>
-          <li>The planks for Rope Bridges are stored in </li>
-        </ul>
       </div>
     )
   }
