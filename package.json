@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "inferno-scripts start",
-    "build": "inferno-scripts build && mv build docs",
+    "build": "rm -rf docs && PUBLIC_URL='/castle-story' inferno-scripts build && mv build docs",
     "test": "inferno-scripts test --env=jsdom",
     "eject": "inferno-scripts eject"
   }
