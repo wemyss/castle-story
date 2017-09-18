@@ -19,6 +19,21 @@ const gameObjects = [
     name: 'lanterns',
     $assetKey: 'Lantern',
     displayName: 'Lanterns',
+  },
+  {
+    name: 'sentinel',
+    $assetKey: 'Sentinel',
+    displayName: 'Sentinel Ward',
+  },
+  {
+    name: 'healing',
+    $assetKey: 'Healing',
+    displayName: 'Healing Ward',
+  },
+  {
+    name: 'catapult',
+    $assetKey: 'Catapulte',
+    displayName: 'Catapult',
   }
 ];
 
