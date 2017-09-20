@@ -5,7 +5,8 @@
 @media (min-width: 980px) {
 	.App {
 		margin: 0 auto;
-		max-width: 900px;
+		width: 80%;
+		max-width: 1280px;
 	}
 }
 
@@ -14,16 +15,15 @@
   padding: 20px;
   color: #3d464d;
   text-align: center;
+  font-size: large;
 }
 
 .App-intro {
-  font-size: large;
+  margin-top: 40px;
   text-align: center;
 }
 
-code {
-  color: #e73a37;
-}
+
 
 
 .App-logo {
@@ -33,12 +33,12 @@ code {
 
 .footer {
 	background-color: rgb(56,170,207);
-	color: white;
+	color: #222;
 	text-align: center;
 	padding: 80px 10px 40px;
 	margin-top: 80px;
 }
 
 .footer a {
-	color: white;
+	color: #222;
 }

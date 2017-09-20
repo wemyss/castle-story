@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Open Sans", "lucida grande", "Segoe UI", arial, verdana, "lucida sans unicode", tahoma, sans-serif;
+  line-height: 1.5;
 }
 
 textarea {
@@ -27,4 +28,29 @@ button {
 
 hr {
 	margin-top: 3rem;
+}
+
+code {
+  color: #e73a37;
+  background-color: #f4f4f4;
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+
+.container {
+	margin: 0 10px;
+}
+
+@media (min-width: 980px) {
+	.container {
+		margin: 0 auto;
+		width: 80%;
+		max-width: 1280px;
+	}
+}
+
+
+.social-icon {
+	height: 60px;
+	width: 60px;
 }
