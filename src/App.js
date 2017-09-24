@@ -1,42 +1,127 @@
-import Component from 'inferno-component';
-import './registerServiceWorker';
-import Checkbox from './Checkbox';
-import './App.css';
-import logo from './logo.png';
-import github from './github.svg';
+import Component from 'inferno-component'
+import './registerServiceWorker'
+import CheckboxList from './CheckboxList'
+import './App.css'
+import logo from './logo.png'
+import github from './github.svg'
 
 const gameObjects = [
+  // Storage
   {
-    name: 'doors',
-    $assetKey: 'Porte',
-    displayName: 'Doors'
+    name: 'Storage',
+    items: [
+      {
+        assetKey: 'Palette',
+        displayName: 'Stockpile',
+      },
+      {
+        assetKey: 'Toolrack',
+        displayName: 'Weapons Stand',
+      },
+    ],
   },
+
+  // Production
   {
-    name: 'ropeBridges',
-    $assetKey: 'RopeBridgeFrame',
-    displayName: 'Rope Bridges',
+    name: 'Production',
+    items: [
+      {
+        assetKey: 'ChoppingBlock',
+        displayName: 'Chopping Block',
+      },
+      {
+        assetKey: 'Furnace',
+        displayName: 'Furnace',
+      },
+      {
+        assetKey: 'Loom',
+        displayName: 'Loom',
+      },
+    ],
   },
+
+  // Crafting
   {
-    name: 'lanterns',
-    $assetKey: 'Lantern',
-    displayName: 'Lanterns',
+    name: 'Crafting',
+    items: [
+      {
+        assetKey: 'Altar',
+        displayName: 'Altar',
+      },
+      {
+        assetKey: 'Forge',
+        displayName: 'Forge',
+      },
+      {
+        assetKey: 'Lab',
+        displayName: 'Laboratory',
+      },
+      {
+        assetKey: 'MachineShop',
+        displayName: 'Machine Shop',
+      },
+      {
+        assetKey: 'Workbench',
+        displayName: 'Workbench',
+      },
+    ],
   },
+
+  // Structures
   {
-    name: 'sentinel',
-    $assetKey: 'Sentinel',
-    displayName: 'Sentinel Ward',
+    name: 'Structures',
+    items:[
+      {
+        assetKey: 'Baril',
+        displayName: 'Barrel',
+      },
+      {
+        assetKey: 'BearTrap',
+        displayName: 'Bear Trap',
+      },
+      {
+        assetKey: 'Catapulte',
+        displayName: 'Catapult',
+      },
+      {
+        assetKey: 'Porte',
+        displayName: 'Door',
+      },
+      {
+        assetKey: 'RopeBridgeFrame',
+        displayName: 'Rope Bridge',
+      },
+    ],
   },
+
+  // Wards
   {
-    name: 'healing',
-    $assetKey: 'Healing',
-    displayName: 'Healing Ward',
+    name: 'Wards',
+    items: [
+      {
+        assetKey: 'Capture',
+        displayName: 'Capture',
+      },
+      {
+        assetKey: 'Healing',
+        displayName: 'Healing',
+      },
+      {
+        assetKey: 'Lantern',
+        displayName: 'Lantern',
+      },
+      {
+        assetKey: 'Pylon',
+        displayName: 'Pylon',
+      },
+      {
+        assetKey: 'Sentinel',
+        displayName: 'Sentinel',
+      },
+    ],
   },
-  {
-    name: 'catapult',
-    $assetKey: 'Catapulte',
-    displayName: 'Catapult',
-  }
-];
+]
+
 
 class App extends Component {
   constructor(props) {
@@ -52,15 +137,19 @@ class App extends Component {
 
   selectAll() {
     this.setState({
-      ...gameObjects.reduce((acc, elem) => {
-        acc[elem.name] = true
+      ...gameObjects.reduce((acc, group) => {
+        acc[group.name] = {}
+        for (let elem of group.items) {
+          acc[group.name][elem.assetKey] = true
+        }
         return acc
       }, {})
     })
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    event.preventDefault()
+
     let data = []
     try {
       data = JSON.parse(this.state.uploadedGameObjects)
@@ -73,14 +162,16 @@ class App extends Component {
       return
     }
 
-    let keysToKeep = gameObjects.reduce((acc, elem) => {
-      if (this.state[elem.name]) {
-        acc.push(elem.$assetKey)
+    let keysToKeep = gameObjects.reduce((acc, group) => {
+      for (let elem of group.items) {
+        if (this.state[group.name][elem.assetKey]) {
+          acc.push(elem.assetKey)
+        }
       }
       return acc
     }, [])
 
-    // Only take the objects that have a $assetKey that contains one of our keysToKeep
+    // Only take the objects that have a assetKey that contains one of our keysToKeep
     let extractedObjects = data.filter(x =>
       x.$assetKey && keysToKeep.some(key => x.$assetKey.includes(key))
     )
@@ -90,9 +181,15 @@ class App extends Component {
     })
   }
 
-  updateCheckbox(name) {
-    this.setState({
-      [name]: !this.state[name],
+  updateCheckbox(groupName, key) {
+    this.setState(prevState => {
+      return {
+        ...prevState,
+        [groupName]: {
+          ...prevState[groupName],
+          [key]: !prevState[groupName][key],
+        }
+      }
     })
   }
 
@@ -121,12 +218,16 @@ class App extends Component {
           <div className='App-intro'>
             <p>To get started, select the objects you want to keep and paste the contents of your <code>gameobjects.json</code> below.</p>
             <form onSubmit={this.handleSubmit}>
-              {gameObjects.map(g =>
-                  <Checkbox key={g.name} label={g.displayName} checked={this.state[g.name]} onChange={() => this.updateCheckbox(g.name)} />
-                )
-              }
-              <br />
-              <br />
+              <div className='options-list'>
+                {gameObjects.map(group =>
+                  <CheckboxList
+                    key={group.name}
+                    group={group}
+                    groupState={this.state[group.name]}
+                    onChange={this.updateCheckbox}
+                  />
+                )}
+              </div>
               <textarea value={this.state.uploadedGameObjects} onChange={this.updateUserGameObjects}></textarea>
               <br />
               <button type='submit'>EXTRACT OBJECTS</button>
@@ -157,4 +258,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App
