@@ -1,3 +1,18 @@
+<img src="src/logo.png" width="310px" />
+
+# Game Object Extractor
+
+## URL
+https://wemyss.github.io/castle-story
+
+## Description
+
+A simple tool to help you pull out only the objects you want from `gameobjects.json` so that you can transfer them into a maps `gameobjects.json` without it breaking or having all these extra objects (bricktron spirits, crystal spawns, etc) you don't want.
+
+
+
+
+---
 This project was bootstrapped with [Create Inferno App](https://github.com/infernojs/create-inferno-app).
 
 Below you will find some information on how to perform common tasks.<br>
