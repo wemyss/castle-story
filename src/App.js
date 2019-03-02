@@ -5,13 +5,21 @@ import './App.css'
 import logo from './logo.png'
 import github from './github.svg'
 
+
+// 👋 Hello!
+// All new game objects should be inserted in this object below
+// Things are to be grouped by what section they exist in the object panel in castle story
 const gameObjects = [
   // Storage
   {
     name: 'Storage',
     items: [
       {
+        // This is the key in the gameobjects.json file. It can also be a substring of the key,
+        // take Pylon for example which can either be `PylonGround` or `PylonWall`.
         assetKey: 'Palette',
+        // The name as displayed when you view the object in castle story.
+        // This is used for displaying in the UI as it's a name people should recognise.
         displayName: 'Stockpile',
       },
       {
@@ -84,8 +92,16 @@ const gameObjects = [
         displayName: 'Catapult',
       },
       {
+        assetKey: 'ShakyDoor',
+        displayName: 'Rickety Door',
+      },
+      {
         assetKey: 'Porte',
         displayName: 'Door',
+      },
+      {
+        assetKey: 'HeavyDoor',
+        displayName: 'Reinforced Door',
       },
       {
         assetKey: 'RopeBridgeFrame',
@@ -120,6 +136,41 @@ const gameObjects = [
       },
     ],
   },
+
+  // Decorations
+  {
+    name: 'Decorations',
+    items: [
+      {
+        assetKey: 'Window',
+        displayName: 'Window',
+      },
+      {
+        assetKey: 'DoubleWindow',
+        displayName: 'Double Window',
+      },
+      {
+        assetKey: 'KnightStatue',
+        displayName: 'Knight Statue',
+      },
+      {
+        assetKey: 'PaintingSmall',
+        displayName: 'Small Painting',
+      },
+      {
+        assetKey: 'PaintingBig',
+        displayName: 'Big Painting'
+      },
+      {
+        assetKey: 'PaintingWide',
+        displayName: 'Wide Painting',
+      },
+      {
+        assetKey: 'PaintingTall',
+        displayName: 'Tall Painting',
+      },
+    ]
+  }
 ]
 
 
@@ -162,6 +213,7 @@ class App extends Component {
       return
     }
 
+    // Get the currently ticked gameobject keys the user wants to keep
     let keysToKeep = gameObjects.reduce((acc, group) => {
       for (let elem of group.items) {
         if (this.state[group.name][elem.assetKey]) {
@@ -171,7 +223,7 @@ class App extends Component {
       return acc
     }, [])
 
-    // Only take the objects that have a assetKey that contains one of our keysToKeep
+    // Only take the objects that have an assetKey that _contains_ one of our keysToKeep
     let extractedObjects = data.filter(x =>
       x.$assetKey && keysToKeep.some(key => x.$assetKey.includes(key))
     )
@@ -210,13 +262,13 @@ class App extends Component {
               <img src={logo} className='App-logo' alt='Castle Story' />
             </a>
             <h1>Game Object Extractor</h1>
-            <p>A simple tool to help you pull out only the objects you want from <code>gameobjects.json</code> so that you can transfer them into a maps <code>gameobjects.json</code> without it breaking or having all these extra objects (bricktron spirits, crystal spawns, etc) you don't want.</p>
+            <p>A simple tool to help you pull out only the objects you want from a saved games' <code>gameobjects.json</code>, so that you can transfer them into a maps <code>gameobjects.json</code> without it breaking or having all these extra weird objects (bricktron spirits, crystal spawns, etc) you don't want.</p>
           </div>
         </div>
 
         <div class='container'>
           <div className='App-intro'>
-            <p>To get started, select the objects you want to keep and paste the contents of your <code>gameobjects.json</code> below.</p>
+            <p>To get started, select the objects you want to keep and paste the contents of your <code>gameobjects.json</code> from your saved game below.</p>
             <form onSubmit={this.handleSubmit}>
               <div className='options-list'>
                 {gameObjects.map(group =>
@@ -232,7 +284,7 @@ class App extends Component {
               <br />
               <button type='submit'>EXTRACT OBJECTS</button>
             </form>
-            <p>Now just copy the outputted JSON below and paste it at the end of the <code>gameobjects.json</code> for your map, just before the last character - which would be a <code>]</code> (make sure you put a comma before the last <code>}</code> as well - you can validate your JSON online)</p>
+            <p>Now just copy the outputted JSON below and paste it at the end of the <code>gameobjects.json</code> for your <b>map</b>, just before the last character - which would be a <code>]</code> (make sure you put a comma before the last <code>}</code> as well - you can validate your JSON online)</p>
             <textarea value={this.state.extractedObjects} readonly></textarea>
           </div>
 
@@ -240,7 +292,8 @@ class App extends Component {
           <h3>Notes</h3>
           <ul>
             <li>The planks for Rope Bridges are stored in <code>PlacedBlocks.json</code>, so make sure to copy that across otherwise you'll just have rope!</li>
-            <li>The outputted JSON is invalid because I've unwrapped it from it's array, make sure to insert it inside of the array in <code>gameobjects.json</code></li>
+            <li>The outputted JSON is invalid because I've unwrapped it from it's array, make sure to insert it <b>inside</b> of the array in <code>gameobjects.json</code></li>
+            <li>You can <a href="https://github.com/wemyss/castle-story/issues/new">raise an issue</a> on Github if you have any problems with this tool</li>
           </ul>
         </div>
 
